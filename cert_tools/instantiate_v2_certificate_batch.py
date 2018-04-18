@@ -22,13 +22,17 @@ from cert_tools import jsonpath_helpers
 
 class Recipient:
     def __init__(self, fields):
+        self.user = fields['user'] ## User-defined change. Added the field for username ##
         self.name = fields['name']
         self.pubkey = fields['pubkey']
         self.identity = fields['identity']
+        self.imagefile = fields['imagefile'] ## User-defined change. Added the field for imageFile ##
 
+        fields.pop('user',None)
         fields.pop('name', None)
         fields.pop('pubkey', None)
         fields.pop('identity', None)
+        fields.pop('imagefile',None)
 
         self.additional_fields = fields
 
@@ -97,6 +101,11 @@ def create_unsigned_certificates_from_roster(config):
                 uid = "".join(c for c in uid if c.isalnum())
             else:
                 uid = str(uuid.uuid4())
+
+            ### User-defined changes. Added a field to change the certificate Image for a given recipient ###
+            template['badge']['image'] = helpers.encode_image(os.path.join(config.abs_data_dir, 'images/'+recipient.imagefile))
+            ### END ###
+
             cert_file = os.path.join(output_dir, uid + '.json')
             if os.path.isfile(cert_file) and config.no_clobber:
                 continue
@@ -111,6 +120,11 @@ def create_unsigned_certificates_from_roster(config):
 
             with open(cert_file, 'w') as unsigned_cert:
                 json.dump(cert, unsigned_cert)
+
+            ### User-defined change. Generating the directory structure for storing certs ###
+            os.system('mkdir '+os.path.join(output_dir,recipient.user))
+            os.system('mv '+cert_file+' '+os.path.join(output_dir,recipient.user))
+            ### END ###
 
 
 def get_config():
