@@ -85,6 +85,11 @@ def create_unsigned_certificates_from_roster(config):
     print('Writing certificates to ' + output_dir)
 
     recipients = []
+
+    ### User defined changes. Defined a mapping list for keeping user mapping. ###
+    mapping=[]
+    ### END ###
+
     with open(roster, 'r') as theFile:
         reader = csv.DictReader(theFile)
         for line in reader:
@@ -121,10 +126,15 @@ def create_unsigned_certificates_from_roster(config):
             with open(cert_file, 'w') as unsigned_cert:
                 json.dump(cert, unsigned_cert)
 
-            ### User-defined change. Generating the directory structure for storing certs ###
-            os.system('mkdir '+os.path.join(output_dir,recipient.user))
-            os.system('mv '+cert_file+' '+os.path.join(output_dir,recipient.user))
+            ###UserDefined changes. Creating a mapping for recepient and filename
+            mapping.append([recipient.user,uid+'.json'])
             ### END ###
+
+        ### User Defined changes. Writes to the mapping csv file ###
+        with open(os.path.join(config.abs_data_dir,'mapping.csv'),'w') as mappingFile:
+            writer = csv.writer(mappingFile)
+            writer.writerows(mapping)
+        ### END ###
 
 
 def get_config():

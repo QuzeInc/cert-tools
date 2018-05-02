@@ -1,7 +1,13 @@
 import os
 import uuid
 
-from pip.req import parse_requirements
+##The below Import line does not work with pip 10 or above 
+##from pip.req import parse_requirements
+try:
+    from pip._internal.req import parse_requirements
+except ImportError:
+    from pip.req import parse_requirements
+
 from setuptools import setup, find_packages
 
 from cert_tools import __version__
