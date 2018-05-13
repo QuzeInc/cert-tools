@@ -1,7 +1,6 @@
 cd cert-tools
 aws s3 cp s3://issuer-data/$issuer/conf.ini conf.ini
 aws s3 cp s3://issuer-data/$issuer/logo.png data/images/logo.png
-aws s3 cp s3://issuer-data/$issuer/issuer-signature.png data/images/issuer-signature.png
 
 aws s3 cp s3://issuer-data/$issuer/$batchId/raw-data/ data/images/ --recursive
 aws s3 cp s3://issuer-data/$issuer/$batchId/raw-data/roster.csv data/rosters/roster.csv

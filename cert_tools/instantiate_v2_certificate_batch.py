@@ -22,13 +22,11 @@ from cert_tools import jsonpath_helpers
 
 class Recipient:
     def __init__(self, fields):
-        self.user = fields['user'] ## User-defined change. Added the field for username ##
         self.name = fields['name']
         self.pubkey = fields['pubkey']
         self.identity = fields['identity']
         self.imagefile = fields['imagefile'] ## User-defined change. Added the field for imageFile ##
 
-        fields.pop('user',None)
         fields.pop('name', None)
         fields.pop('pubkey', None)
         fields.pop('identity', None)
@@ -126,8 +124,8 @@ def create_unsigned_certificates_from_roster(config):
             with open(cert_file, 'w') as unsigned_cert:
                 json.dump(cert, unsigned_cert)
 
-            ###UserDefined changes. Creating a mapping for recepient and filename
-            mapping.append([recipient.user,uid+'.json'])
+            ###UserDefined changes. Creating a mapping for recepient email and filename
+            mapping.append([recipient.identity,uid+'.json'])
             ### END ###
 
         ### User Defined changes. Writes to the mapping csv file ###
